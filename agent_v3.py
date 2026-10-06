@@ -77,7 +77,7 @@ class AgentV3:
         return "\n".join(out[:8])
 
     def _related(self, question):
-        return [{"term": h["term"], "type": h["hit_type"], "score": h["score"]}
+        return [{"term": h["term"], "type": h["hit_type"], "score": h.get("score", 1)}
                 for h in self.a.search_theory_kb(question, top_k=3)]
 
     # ---------- LLM 作答 ----------
@@ -99,7 +99,7 @@ class AgentV3:
         ctx = self._context(question)
         pub_hits = []
         local_top = self._related(question)
-        weak = (not local_top) or local_top[0]["score"] < 2 \
+        weak = (not local_top) or local_top[0].get("score", 1) < 2 \
             or re.search(r"百科|出处|原文|谁提出|谁最早", question)
         if self.public and weak:
             try:

@@ -11,6 +11,8 @@ import streamlit as st
 BASE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE)
 from run_theory_agent import TheoryAgent, load_config
+from agent_v2 import AgentV2
+from agent_v3 import AgentV3
 
 st.set_page_config(page_title="新闻理论问答Agent", page_icon="📰")
 
@@ -74,7 +76,8 @@ def kb_delete(kb, kind_cn, key):
 # ---------- 状态 ----------
 @st.cache_resource
 def get_agent():
-    return TheoryAgent()
+    v1 = TheoryAgent()
+    return AgentV3(v1, AgentV2(v1))  # 统一问答层：有Key走LLM，无Key降级规则引擎
 
 
 def get_kb():
@@ -93,8 +96,8 @@ st.sidebar.markdown(f"**{config.get('agent_name', '理论问答Agent')}**")
 page = st.sidebar.radio("页面", ["问答", "知识库管理"])
 st.sidebar.markdown("---")
 if page == "问答":
-    mode = st.sidebar.radio("运行模式", ["离线规则引擎"])
-    st.sidebar.markdown("检索口径库 → 组装规范答案 → 表述校准 → 拒答/复核闸门")
+    level = st.sidebar.radio("答案级别", ["标准", "速查", "论述"], index=0)
+    st.sidebar.markdown("检索口径库 → LLM理解作答（无Key自动降级规则引擎）")
 
 
 # ---------- 问答页 ----------
@@ -103,6 +106,8 @@ if page == "问答":
     st.caption("理论问答与表述校准 · 答案来自本地口径库，正式使用请核对权威原文")
     kb = get_kb()
     st.sidebar.markdown(f"- 概念 {len(kb['concepts'])} 条\n- 关系 {len(kb['relations'])} 组\n- 误区校准 {len(kb['misstatement_bank'])} 条")
+    _ag = get_agent()
+    st.sidebar.caption(f"当前作答模式：{'Kimi LLM' if _ag.mode == 'llm' else '规则引擎（设KIMI_API_KEY升级）'}")
 
     if "history" not in st.session_state:
         st.session_state.history = []
@@ -126,17 +131,20 @@ if page == "问答":
         del st.session_state.pending
 
     if q:
-        agent.kb = kb  # 使用会话中的最新知识库
+        agent = get_agent()
+        agent.a.kb = kb   # 同步会话中的最新知识库
+        agent.kb = kb
         with st.chat_message("user"):
             st.markdown(q)
         with st.chat_message("assistant"):
-            res = agent.answer(q)
+            res = agent.answer(q, level=level)
             if res["decision"] == "answer":
-                a = res["answer"]
-                md = f"**规范结论**：{a['规范结论']}\n\n"
-                md += "\n".join(f"- {p}" for p in a["要点解释"])
-                md += "\n\n**依据**：" + " | ".join(f"{x['条目']}（{x['来源等级']}/{x['状态']}）" for x in a["依据"])
-                md += "\n\n**风险**：" + "；".join(a["风险与需人工复核项"])
+                md = res["answer_md"]
+                rel = res.get("related", [])
+                if len(rel) > 1:
+                    md += "\n\n**相关条目**：" + " | ".join(f"{x['term']}({x['type']})" for x in rel)
+                if res.get("mode") == "llm":
+                    st.caption("由 Kimi 基于口径库材料作答")
             else:
                 d = "已拒答" if res["decision"] == "refuse" else "转人工复核"
                 md = f"**{d}**：{res['reason']}\n\n安全替代：{res.get('safe_alternative') or '请提供正式公开文本或走口径核定流程。'}"

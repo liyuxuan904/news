@@ -57,8 +57,13 @@ class TheoryAgent:
         q = re.sub(r"[‘’“”'\"'\?？。，,:：]", "", query)
         hits = []
         for c in self.kb["concepts"]:
-            keys = [c["term"]] + c.get("aliases", []) + c.get("keywords", [])
-            score = sum(1 for k in keys if k in q)
+            score = 0
+            for k in [c["term"]] + c.get("aliases", []):
+                if k and k in q:
+                    score += 2
+            for k in c.get("keywords", []):
+                if k and k in q:
+                    score += 1
             if score:
                 hits.append((score, "concept", c["term"], c["canonical_definition"], c["source_level"], c["status"]))
         for r in self.kb["relations"]:
@@ -81,7 +86,7 @@ class TheoryAgent:
             if any(k in q for k in kws) or (ngrams(m["wrong"]) & qgrams):
                 hits.append((1, "misstatement", m["wrong"][:20], m["correction"], "A", "current"))
         hits.sort(key=lambda x: -x[0])
-        return [{"hit_type": t, "term": tm, "content": d, "source_level": sl, "status": st}
+        return [{"hit_type": t, "term": tm, "content": d, "source_level": sl, "status": st, "score": s}
                 for s, t, tm, d, sl, st in hits[:top_k]]
 
     def compare_concepts(self, concept_a, concept_b, scenario=None):
@@ -146,6 +151,10 @@ class TheoryAgent:
             points += [rel["conclusion"], rel["boundary"]] + [f"常见误读：{x}" for x in rel.get("misreadings", [])]
         if top:
             points.append(top["content"])
+        # 多命中融合：第二个强命中概念的定义也纳入要点，避免单一 top1 造成的答非所问
+        if len(hits) >= 2 and hits[1]["hit_type"] == "concept" and hits[1]["score"] >= 2 \
+                and hits[1]["term"] != top["term"]:
+            points.append("相关条目「" + hits[1]["term"] + "」：" + hits[1]["content"][:80] + "…")
         if calib and calib["issues"]:
             points += [f"命中不规范表述：{i['hit']} → 建议：{i['suggestion']}" for i in calib["issues"]]
         points = list(dict.fromkeys(points))[:6]
@@ -160,7 +169,9 @@ class TheoryAgent:
                     "规范结论": (rel["conclusion"] if rel else (top["term"] + "的规范定义如下")),
                     "要点解释": points,
                     "依据": [{"条目": h["term"], "来源等级": h["source_level"], "状态": h["status"]} for h in hits[:3]],
-                    "风险与需人工复核项": risks or ["无"]},
+                    "风险与需人工复核项": risks or ["无"],
+                    "related": [{"term": h["term"], "type": h["hit_type"], "score": h["score"]} for h in hits[:3]],
+                    "low_confidence": bool(hits and hits[0]["score"] < 2)},
                 "human_ticket": None}
 
 

@@ -55,7 +55,7 @@ class TheoryAgent:
         q = re.sub(r"[‘’“”'\"'\?？。，,:：]", "", query)
         hits = []
         for c in self.kb["concepts"]:
-            keys = [c["term"]] + c.get("aliases", [])
+            keys = [c["term"]] + c.get("aliases", []) + c.get("keywords", [])
             score = sum(1 for k in keys if k in q)
             if score:
                 hits.append((score, "concept", c["term"], c["canonical_definition"], c["source_level"], c["status"]))

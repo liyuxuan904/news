@@ -35,6 +35,7 @@ class TheoryAgent:
         (r"编(一段|造).{0,8}讲话|像真的一样", "伪造引语/出处类请求"),
         (r"内部.{0,8}(讲话|阅评|材料)|找出谁写的", "涉密或无法核实来源"),
         (r"已经过时了|过时论", "不成立的否定性预设"),
+        (r"违反新闻自由|论证.{0,6}错误|证明.{0,8}不对", "否定性预设论证请求"),
         (r"旧.{0,4}表述一直能用|按旧口径", "以旧口径冒充现行口径"),
         (r"昨天闭幕|最新.{0,4}精神", "无法核实的最新文件表述"),
     ]
@@ -42,8 +43,9 @@ class TheoryAgent:
     def __init__(self):
         self.kb = load("news_principles_kb.json")  # 知识库必需
         self.tools = load("theory_agent_tools.json", required=False) or []
-        self.evalset = load("theory_eval_50.json", required=False) \
-            or {"meta": {"total": 0}, "cases": []}  # 可选：仅 --eval / --api 模式需要
+        self.evalset = load("theory_eval_full.json", required=False) \
+            or load("theory_eval_50.json", required=False) \
+            or {"meta": {"total": 0}, "cases": []}  # 可选：优先105题完整版，回退50题
         print(f"[init] 知识库概念 {len(self.kb['concepts'])} 条 | 关系 {len(self.kb['relations'])} 条 | "
               f"误区 {len(self.kb['misstatement_bank'])} 条 | 工具 {len(self.tools)} 个 | 评测题 {self.evalset['meta']['total']} 道")
 

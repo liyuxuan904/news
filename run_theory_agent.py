@@ -259,6 +259,7 @@ def main():
     ap.add_argument("--eval", type=int, metavar="N", help="离线跑评测集前N题并统计")
     ap.add_argument("--ask", type=str, help="回答一个问题")
     ap.add_argument("--chat", action="store_true", help="进入交互对话模式（REPL）")
+    ap.add_argument("--check", action="store_true", help="环境自检：Key/公共源连通性/知识库")
     ap.add_argument("--api", action="store_true", help="调用真实Kimi API（需KIMI_API_KEY）")
     args = ap.parse_args()
     config = load_config()
@@ -267,6 +268,24 @@ def main():
         run_api_mode(args.ask, config)
         return
 
+    if args.check:
+        print("=== 环境自检 ===")
+        print("KIMI_API_KEY:", "已设置" if os.environ.get("KIMI_API_KEY") else "未设置（规则引擎模式）")
+        try:
+            from public_kb import PublicKB
+            pub = PublicKB()
+            print("公共源已加载:", list(pub.sources.keys()))
+            for name in pub.sources:
+                try:
+                    hits = pub.search("新闻", sources=[name], top_k=1)
+                    print(f"  {name}: 连通 ✓ 命中 {len(hits)} 条" + (f" | 示例: {hits[0]['title'][:20]}" if hits else ""))
+                except Exception as e:
+                    print(f"  {name}: 失败 ✗ {type(e).__name__}: {e}")
+        except Exception as e:
+            print("public_kb 导入失败:", e)
+        kb = json.load(open(os.path.join(BASE, "news_principles_kb.json"), encoding="utf-8"))
+        print(f"知识库 v{kb['meta']['version']}: 概念 {len(kb['concepts'])} / 关系 {len(kb['relations'])} / 误区 {len(kb['misstatement_bank'])}")
+        return
     agent = TheoryAgent()
     if args.chat:
         chat_loop(agent, args.api)

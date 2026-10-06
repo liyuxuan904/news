@@ -118,15 +118,21 @@ class AgentV3:
         ctx = self._context(question)
         pub_hits = []
         local_top = self._related(question)
+        legal = re.search(r"民法典|刑法|著作权|人格权|隐私|名誉|法律|法条|第.{1,6}条|规定|条例", question)
         weak = (not local_top) or local_top[0].get("score", 1) < 2 \
-            or re.search(r"百科|出处|原文|谁提出|谁最早", question)
+            or re.search(r"百科|出处|原文|谁提出|谁最早", question) or legal
+        sources = ["flk", "wikipedia"] if legal else ["wikipedia", "flk"]
         if self.public and weak:
             try:
-                pub_hits = self.public.search(question, sources=["wikipedia", "flk"])
+                pub_hits = self.public.search(question, sources=sources)
+                print(f"[public] triggered=True legal={bool(legal)} hits={len(pub_hits)}")
                 if pub_hits:
                     ctx = (ctx + "\n" if ctx else "") + self.public.format(pub_hits)
-            except Exception:
+            except Exception as e:
+                print(f"[public] triggered=True error={type(e).__name__}: {e}")
                 pub_hits = []
+        else:
+            print(f"[public] triggered=False top_score={local_top[0].get('score') if local_top else 0}")
         if self.llm and ctx:
             try:
                 md = self._llm_answer(question, ctx, level)

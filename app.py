@@ -222,6 +222,28 @@ else:
                            data=json.dumps(kb, ensure_ascii=False, indent=2),
                            file_name="news_principles_kb.json", mime="application/json")
         st.info("云端运行时文件系统只读：下载后请替换 GitHub 仓库中的同名文件并提交，修改才会永久生效；push 后应用自动重新部署。")
+        st.subheader("公共源自检")
+        if st.button("测试公共知识源连通性"):
+            try:
+                from public_kb import PublicKB
+                try:
+                    brave = st.secrets.get("BRAVE_API_KEY", None)
+                except Exception:
+                    brave = None
+                pub = PublicKB(brave_key=brave)
+                for name, src in pub.sources.items():
+                    try:
+                        hits = pub.search("新闻", sources=[name], top_k=1)
+                        if hits:
+                            st.success(f"{name}：连通 ✓ 命中《{hits[0]['title']}》")
+                        else:
+                            st.warning(f"{name}：连通 ✓ 但无命中结果")
+                    except Exception as e:
+                        st.error(f"{name}：失败 ✗ {type(e).__name__}：{e}")
+                if "brave" not in pub.sources:
+                    st.info("未配置 BRAVE_API_KEY，Brave 全网搜索未启用（可选增强）")
+            except Exception as e:
+                st.error(f"自检失败：{e}")
         st.subheader("导入合并")
         up = st.file_uploader("上传 entries.json（支持 concepts / relations / misstatement_bank 等数组，按主键去重合并）",
                               type=["json"])

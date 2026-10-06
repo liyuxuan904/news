@@ -17,8 +17,13 @@ import json, os, re, argparse, sys
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 
-def load(name):
-    with open(os.path.join(BASE, name), encoding='utf-8') as f:
+def load(name, required=True):
+    path = os.path.join(BASE, name)
+    if not os.path.exists(path):
+        if required:
+            raise FileNotFoundError(f"missing required file: {path}")
+        return None
+    with open(path, encoding='utf-8') as f:
         return json.load(f)
 
 
@@ -35,9 +40,10 @@ class TheoryAgent:
     ]
 
     def __init__(self):
-        self.kb = load("news_principles_kb.json")
-        self.tools = load("theory_agent_tools.json")
-        self.evalset = load("theory_eval_50.json")
+        self.kb = load("news_principles_kb.json")  # 知识库必需
+        self.tools = load("theory_agent_tools.json", required=False) or []
+        self.evalset = load("theory_eval_50.json", required=False) \
+            or {"meta": {"total": 0}, "cases": []}  # 可选：仅 --eval / --api 模式需要
         print(f"[init] 知识库概念 {len(self.kb['concepts'])} 条 | 关系 {len(self.kb['relations'])} 条 | "
               f"误区 {len(self.kb['misstatement_bank'])} 条 | 工具 {len(self.tools)} 个 | 评测题 {self.evalset['meta']['total']} 道")
 
@@ -70,7 +76,7 @@ class TheoryAgent:
         qgrams = ngrams(q)
         for m in self.kb["misstatement_bank"]:
             kws = m.get("keywords") or []
-            if any(k in q for k in kws) or (ngrams(m["wrong"]) & qgrams) or (ngrams(m["correction"]) & qgrams):
+            if any(k in q for k in kws) or (ngrams(m["wrong"]) & qgrams):
                 hits.append((1, "misstatement", m["wrong"][:20], m["correction"], "A", "current"))
         hits.sort(key=lambda x: -x[0])
         return [{"hit_type": t, "term": tm, "content": d, "source_level": sl, "status": st}

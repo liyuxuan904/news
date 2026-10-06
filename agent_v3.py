@@ -28,7 +28,7 @@ class AgentV3:
         self.evalset = v1_agent.evalset
         try:
             from public_kb import PublicKB
-            self.public = PublicKB(bing_key=os.environ.get("BING_SEARCH_KEY"))
+            self.public = PublicKB(brave_key=os.environ.get("BRAVE_API_KEY"))
         except Exception:
             self.public = None
         self.model = os.getenv("KIMI_MODEL", "moonshot/kimi-k3")
@@ -122,7 +122,7 @@ class AgentV3:
             or re.search(r"百科|出处|原文|谁提出|谁最早", question)
         if self.public and weak:
             try:
-                pub_hits = self.public.search(question)
+                pub_hits = self.public.search(question, sources=["wikipedia", "flk"])
                 if pub_hits:
                     ctx = (ctx + "\n" if ctx else "") + self.public.format(pub_hits)
             except Exception:

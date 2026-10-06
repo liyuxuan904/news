@@ -62,33 +62,62 @@ class TemplateSource:
         return out
 
 
-class BingSource:
-    name = "bing"
+class BraveSource:
+    """Brave Search API（免费档约2000次/月，需 BRAVE_API_KEY）"""
+    name = "brave"
 
     def __init__(self, api_key):
         self.api_key = api_key
 
     def search(self, query, top_k=3):
-        url = ("https://api.bing.microsoft.com/v7.0/search?"
-               + urllib.parse.urlencode({"q": query, "count": top_k, "mkt": "zh-CN"}))
-        req = urllib.request.Request(url, headers={"Ocp-Apim-Subscription-Key": self.api_key})
+        url = ("https://api.search.brave.com/res/v1/web/search?"
+               + urllib.parse.urlencode({"q": query, "count": top_k, "search_lang": "zh-hans"}))
+        req = urllib.request.Request(url, headers={
+            "Accept": "application/json", "X-Subscription-Token": self.api_key})
         with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
             data = json.loads(r.read().decode("utf-8"))
-        return [{"source": self.name, "title": p.get("name", ""),
-                 "url": p.get("url", ""), "snippet": p.get("snippet", "")}
-                for p in data.get("webPages", {}).get("value", [])][:top_k]
+        return [{"source": self.name, "title": w.get("title", ""),
+                 "url": w.get("url", ""), "snippet": w.get("description", "")}
+                for w in data.get("web", {}).get("results", [])][:top_k]
+
+
+class FlkSource:
+    """国家法律法规数据库（flk.npc.gov.cn）公开检索接口，权威法条来源。
+    接口为网站公开 JSON 端点，参数或结构变动时静默返回空，不影响主链路。"""
+    name = "flk"
+    api = "https://flk.npc.gov.cn/api/"
+
+    def search(self, query, top_k=3):
+        params = {"type": "flfg", "searchType": "title;accurate",
+                  "sortTr": "f_bbrq_s;desc", "sort": "true",
+                  "page": 1, "size": top_k, "keyword": query}
+        url = self.api + "?" + urllib.parse.urlencode(params)
+        req = urllib.request.Request(url, headers=DEFAULT_HEADERS)
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+            data = json.loads(r.read().decode("utf-8"))
+        items = (data.get("result") or {}).get("data") or data.get("data") or []
+        out = []
+        for it in items[:top_k]:
+            lid = it.get("id", "")
+            out.append({
+                "source": self.name,
+                "title": it.get("title", ""),
+                "url": f"https://flk.npc.gov.cn/detail2.html?{lid}" if lid else "https://flk.npc.gov.cn/",
+                "snippet": f"{it.get('office', '')}｜{it.get('publish', '')[:10]}｜{it.get('status', '')}｜{it.get('type', '')}｜{it.get('expiry') or '现行有效' if not it.get('expiry') else '已失效'}"
+            })
+        return out
 
 
 class PublicKB:
-    def __init__(self, bing_key=None, templates=None):
-        self.sources = {"wikipedia": WikipediaSource()}
-        if bing_key:
-            self.sources["bing"] = BingSource(bing_key)
+    def __init__(self, brave_key=None, templates=None):
+        self.sources = {"wikipedia": WikipediaSource(), "flk": FlkSource()}
+        if brave_key:
+            self.sources["brave"] = BraveSource(brave_key)
         for i, tpl in enumerate(templates or []):
             self.sources[f"template{i}"] = (TemplateSource(*tpl) if isinstance(tpl, tuple) else TemplateSource(**tpl))
 
     def search(self, query, sources=None, top_k=5):
-        names = sources or ["wikipedia"]
+        names = sources or ["wikipedia", "flk"]
         out, seen = [], set()
         for name in names:
             src = self.sources.get(name)

@@ -1,9 +1,9 @@
 {
   "meta": {
     "name": "新闻工作党性原则与基本方针知识库",
-    "version": "1.4.1",
+    "version": "1.5.0",
     "updated": "2026-10-06",
-    "description": "面向理论问答与表述校准的概念库、关系库、口径库、误区库与文件索引。仅作辅助，正式使用以权威原文为准。 v1.2 扩充：五个事关、48字职责使命、四个有利于、马新观核心四观念、个别真实与总体真实、建设性监督四有利于、政治家办报、媒体融合、四者定位、十五字使命任务、三个自问。 v1.3 扩充：马新观历史源流（马恩/列宁/毛泽东）、国际传播能力建设（讲好中国故事、中国话语叙事体系、战略传播五个力）、网络治理（网络意识形态主阵地、综合治理体系、依法管网、县级融媒体中心）。 v1.4 扩充：党性原则的原因依据（理论/历史/现实逻辑、舆论八喻、三个地带、属性定位）、基本要求（四个牢牢坚持、三管原则、五个体现维护、三个看齐、责任制、导向全过程）、行动方法（四力、十二字方针、政治家办报落到队伍、六项制度），并新增综合论述答题模板。",
+    "description": "面向理论问答与表述校准的概念库、关系库、口径库、误区库与文件索引。仅作辅助，正式使用以权威原文为准。 v1.2 扩充：五个事关、48字职责使命、四个有利于、马新观核心四观念、个别真实与总体真实、建设性监督四有利于、政治家办报、媒体融合、四者定位、十五字使命任务、三个自问。 v1.3 扩充：马新观历史源流（马恩/列宁/毛泽东）、国际传播能力建设（讲好中国故事、中国话语叙事体系、战略传播五个力）、网络治理（网络意识形态主阵地、综合治理体系、依法管网、县级融媒体中心）。 v1.4 扩充：党性原则的原因依据（理论/历史/现实逻辑、舆论八喻、三个地带、属性定位）、基本要求（四个牢牢坚持、三管原则、五个体现维护、三个看齐、责任制、导向全过程）、行动方法（四力、十二字方针、政治家办报落到队伍、六项制度），并新增综合论述答题模板。 v1.5 扩充：新闻学基础（本源/要素/体裁/采访/编辑/侵权）、传播学基础（受众/效果/议程设置/把关人/意见领袖/沉默的螺旋）、党史新闻事业（湘江评论/向导/红中社/解放日报改版/刘少奇谈话/陆定一定义）、方针深化（双百/新闻发布/网上群众路线/中国新闻奖/三项学习教育）、国际传播方法（借船出海/本土化）。",
     "usage_note": "检索时优先命中 status=current 且 source_level=A 的条目；历史表述与学术解释必须显式标注，不得冒充现行口径。"
   },
   "concepts": [
@@ -1498,6 +1498,597 @@
       ],
       "status": "current",
       "notes": "辨析：新闻价值≠新闻的价值。"
+    },
+    {
+      "term": "新闻本源",
+      "canonical_definition": "新闻的本源是事实，新闻是事实的报道；事实是第一性的，新闻是第二性的；先有事实后有新闻，没有事实就没有新闻。",
+      "aliases": [
+        "事实本源"
+      ],
+      "keywords": [
+        "事实本源",
+        "第一性",
+        "本源"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "新闻学概论类权威教材"
+      ],
+      "status": "current",
+      "layer": "要求层",
+      "notes": ""
+    },
+    {
+      "term": "新闻要素",
+      "canonical_definition": "新闻要素是构成新闻事实的基本成分，即5W：何时（When）、何地（Where）、何人（Who）、何事（What）、何因（Why），后来增加How；要素齐全是真实准确的基础。",
+      "aliases": [
+        "5W",
+        "新闻五要素"
+      ],
+      "keywords": [
+        "5W",
+        "五要素",
+        "何时何地何人"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "新闻学概论类权威教材"
+      ],
+      "status": "current",
+      "layer": "要求层",
+      "notes": ""
+    },
+    {
+      "term": "消息",
+      "canonical_definition": "消息是以简要的文字迅速报道新闻事实的新闻体裁，讲究用事实说话，结构常含标题、导语、主体、背景、结尾，导语概括最重要事实。",
+      "aliases": [
+        "消息体裁"
+      ],
+      "keywords": [
+        "消息",
+        "导语",
+        "倒金字塔"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "新闻写作类权威教材"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "通讯",
+      "canonical_definition": "通讯是详细、生动地报道新闻事件或人物的新闻体裁，比消息详尽，运用叙述、描写、抒情、议论等多种手法，常见类型有人物通讯、事件通讯、工作通讯。",
+      "aliases": [
+        "通讯体裁"
+      ],
+      "keywords": [
+        "通讯",
+        "人物通讯",
+        "事件通讯"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "新闻写作类权威教材"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "新闻评论",
+      "canonical_definition": "新闻评论是就有新闻价值的事实发表意见的新闻体裁，以议论为主要表达方式，代表媒体立场，引导舆论；选题要准、立意要深、论据要实。",
+      "aliases": [
+        "评论",
+        "社论",
+        "评论员文章"
+      ],
+      "keywords": [
+        "评论",
+        "社论",
+        "立论"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "新闻评论类权威教材"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "新闻采访",
+      "canonical_definition": "新闻采访是记者为获取新闻事实材料而进行的调查访问活动，基本要求：准备好、提问准、观察细、记录全、核实严；采访是新闻生产的第一道工序。",
+      "aliases": [
+        "采访"
+      ],
+      "keywords": [
+        "采访",
+        "提问",
+        "调查"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "新闻采访类权威教材"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "硬新闻与软新闻",
+      "canonical_definition": "硬新闻是关系国计民生和人们切身利益的新闻，时效性强、写法严肃；软新闻是富有人情味、趣味性强的新闻，写法活泼；主流媒体以硬新闻为骨干。",
+      "aliases": [
+        "软新闻"
+      ],
+      "keywords": [
+        "硬新闻",
+        "软新闻"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "新闻学概论类权威教材"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "新闻编辑",
+      "canonical_definition": "新闻编辑是对稿件进行选择、加工、配置和组织的再创造劳动，包括选稿、改稿、拟题、组版（组节目）等环节，是新闻生产的'总把关'环节之一。",
+      "aliases": [
+        "编辑"
+      ],
+      "keywords": [
+        "编辑",
+        "改稿",
+        "拟题",
+        "组版"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "新闻编辑类权威教材"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "新闻侵权",
+      "canonical_definition": "新闻报道侵害他人合法权益的行为主要包括侵害名誉权、隐私权、肖像权、著作权等；构成侵权的要件与抗辩（内容真实、公正评论、公共利益等）须依法把握。",
+      "aliases": [
+        "新闻侵权"
+      ],
+      "keywords": [
+        "侵权",
+        "名誉权",
+        "隐私权",
+        "肖像权",
+        "著作权"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "新闻法规类权威教材"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": "注意与公共利益、舆论监督的界限"
+    },
+    {
+      "term": "受众",
+      "canonical_definition": "受众是新闻信息的接受者，包括读者、听众、观众、网民；要坚持受众本位与正确导向的统一，研究受众需求、尊重受众知情权参与权，反对迎合低俗趣味。",
+      "aliases": [
+        "读者观众网民"
+      ],
+      "keywords": [
+        "受众",
+        "读者",
+        "听众",
+        "观众",
+        "用户"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "传播学类权威教材"
+      ],
+      "status": "current",
+      "layer": "要求层",
+      "notes": ""
+    },
+    {
+      "term": "传播效果",
+      "canonical_definition": "传播效果是传播行为对受众和社会产生的影响，包括认知、态度、行为三个层面；效果研究提醒新闻工作既要重视传播更要重视实效。",
+      "aliases": [
+        "效果研究"
+      ],
+      "keywords": [
+        "传播效果",
+        "认知",
+        "态度",
+        "行为"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "传播学类权威教材"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "议程设置",
+      "canonical_definition": "议程设置理论认为大众传媒不能决定人们怎么想，但能通过选择报道内容影响人们想什么；主流媒体要通过设置议题引导舆论、服务大局。",
+      "aliases": [
+        "agenda setting"
+      ],
+      "keywords": [
+        "议程设置",
+        "议题"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "传播学类权威教材"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "把关人",
+      "canonical_definition": "把关人理论认为信息传播要经过一道道'门区'的筛选，新闻工作者就是把关人；坚持正确导向就是要把好政治关、事实关、格调关。",
+      "aliases": [
+        "gatekeeping"
+      ],
+      "keywords": [
+        "把关",
+        "把关人",
+        "筛选"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "传播学类权威教材"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "意见领袖与两级传播",
+      "canonical_definition": "两级传播理论认为信息常经意见领袖中介流向大众；做好舆论引导要重视意见领袖作用、培育'红色大V'，发挥其桥梁与放大效应。",
+      "aliases": [
+        "两级传播"
+      ],
+      "keywords": [
+        "意见领袖",
+        "两级传播",
+        "KOL"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "传播学类权威教材"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "沉默的螺旋",
+      "canonical_definition": "沉默的螺旋理论认为优势意见会越来越强、劣势意见越来越沉默；网络时代要防止'沉默的螺旋'压制理性声音，营造清朗理性的舆论环境。",
+      "aliases": [
+        "spiral of silence"
+      ],
+      "keywords": [
+        "沉默的螺旋",
+        "优势意见"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "传播学类权威教材"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "湘江评论",
+      "canonical_definition": "《湘江评论》是毛泽东1919年在长沙主编的刊物，热情歌颂十月革命，广泛传播新思潮，被誉为'最有分量的刊物之一'，体现早期共产党人报刊活动传统。",
+      "aliases": [
+        "湘江评论"
+      ],
+      "keywords": [
+        "湘江评论",
+        "1919"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "中国共产党新闻工作史料公开文献"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": "具体表述以党史公开文献为准"
+    },
+    {
+      "term": "向导周报",
+      "canonical_definition": "《向导》是中共中央1922年创办的政治机关报，系统宣传党的民主革命纲领，是党报发展史上的重要里程碑。",
+      "aliases": [
+        "向导"
+      ],
+      "keywords": [
+        "向导周报",
+        "中共中央机关报"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "中国共产党新闻工作史料公开文献"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "红色中华通讯社",
+      "canonical_definition": "红中社1931年在江西瑞金成立，是新华社的前身，出版《红色中华》报；1937年改名新华社，1940年创办延安新华广播电台，开创人民广播事业。",
+      "aliases": [
+        "红中社"
+      ],
+      "keywords": [
+        "红中社",
+        "红色中华",
+        "人民广播"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "新华社社史公开文献"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "解放日报与延安改版",
+      "canonical_definition": "《解放日报》1941年在延安创刊，1942年改版确立了党报党性原则、密切联系实际的办报方针，是党报史上重要转折点；改版确立了'全党办报'传统。",
+      "aliases": [
+        "解放日报改版"
+      ],
+      "keywords": [
+        "解放日报",
+        "改版",
+        "全党办报"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "中国共产党新闻工作史料公开文献"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "刘少奇对华北记者团的谈话",
+      "canonical_definition": "1948年刘少奇在对华北记者团的谈话中指出新闻事业是党的重要建设事业，新闻记者要有实事求是的态度和为人民服务的立场，该谈话是党的新闻思想重要文献。",
+      "aliases": [
+        "华北记者团谈话"
+      ],
+      "keywords": [
+        "刘少奇",
+        "华北记者团",
+        "谈话"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "中国共产党新闻工作史料公开文献"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "我们对新闻学的基本观点",
+      "canonical_definition": "陆定一1943年发表《我们对新闻学的基本观点》，提出'新闻的定义，就是新近发生的事实的报道'，从哲学高度阐明新闻本源问题，是马克思主义新闻观中国化的奠基性文献。",
+      "aliases": [
+        "陆定一新闻定义"
+      ],
+      "keywords": [
+        "陆定一",
+        "基本观点",
+        "新闻的定义"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "马克思主义新闻观经典文献"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "双百方针",
+      "canonical_definition": "双百方针即百花齐放、百家争鸣，是促进艺术发展和科学进步的方针；新闻文化工作要贯彻双百方针，同时坚持正确导向、反对错误思潮。",
+      "aliases": [
+        "百花齐放百家争鸣"
+      ],
+      "keywords": [
+        "双百",
+        "百花齐放",
+        "百家争鸣"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "党的宣传思想工作相关重要论述"
+      ],
+      "status": "current",
+      "layer": "要求层",
+      "notes": ""
+    },
+    {
+      "term": "新闻发布制度",
+      "canonical_definition": "新闻发布制度是党和政府发布权威信息、回应社会关切的制度安排，包括新闻发言人、新闻发布会、政府网站与政务新媒体发布等；重大信息要及时准确公开。",
+      "aliases": [
+        "新闻发言人"
+      ],
+      "keywords": [
+        "新闻发布",
+        "新闻发言人",
+        "发布会"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "新闻发布相关制度公开文件"
+      ],
+      "status": "current",
+      "layer": "方法层",
+      "notes": ""
+    },
+    {
+      "term": "网上群众路线",
+      "canonical_definition": "践行网上群众路线，要求党政机关和领导干部走好网络群众路线，通过网络倾听民意、回应关切、接受监督，让互联网成为同群众沟通交流的新平台。",
+      "aliases": [
+        "网络群众路线"
+      ],
+      "keywords": [
+        "网上群众路线",
+        "网络问政",
+        "网络发言人"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "党的群众路线相关重要论述"
+      ],
+      "status": "current",
+      "layer": "方法层",
+      "notes": ""
+    },
+    {
+      "term": "中国新闻奖",
+      "canonical_definition": "中国新闻奖是全国优秀新闻作品最高奖，由中华全国新闻工作者协会主办；评奖导向强调导向正确、内容真实、形式创新，是新闻创优的'指挥棒'。",
+      "aliases": [
+        "新闻奖"
+      ],
+      "keywords": [
+        "中国新闻奖",
+        "新闻评奖"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "中国记协公开文件"
+      ],
+      "status": "current",
+      "layer": "扩展层",
+      "notes": ""
+    },
+    {
+      "term": "三项学习教育活动",
+      "canonical_definition": "新闻战线三项学习教育活动指马克思主义新闻观学习教育、职业精神职业道德学习教育、禁止有偿新闻专项教育，是新闻队伍建设的重要举措。",
+      "aliases": [
+        "三项学习教育"
+      ],
+      "keywords": [
+        "三项学习教育",
+        "有偿新闻",
+        "专项教育"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "新闻队伍建设相关公开文件"
+      ],
+      "status": "current",
+      "layer": "方法层",
+      "notes": ""
+    },
+    {
+      "term": "借筒传声借船出海",
+      "canonical_definition": "国际传播中'借筒传声、借船出海'指借助境外媒体平台、渠道和话语资源传播中国声音，与外方合作拍片、供版供稿、人员交流，提高对外传播到达率。",
+      "aliases": [
+        "借船出海"
+      ],
+      "keywords": [
+        "借筒传声",
+        "借船出海",
+        "借嘴说话"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "国际传播实践相关公开文献"
+      ],
+      "status": "current",
+      "layer": "方法层",
+      "notes": ""
+    },
+    {
+      "term": "对外传播本土化",
+      "canonical_definition": "对外传播本土化指按对象国（地区）的语言习惯、文化心理和接受特点定制内容与渠道，推进本土化采编、本土化合作、本土化表达，增强传播实效。",
+      "aliases": [
+        "本土化传播"
+      ],
+      "keywords": [
+        "本土化",
+        "在地化",
+        "对象国"
+      ],
+      "dimensions": [],
+      "relations": [],
+      "source_level": "A",
+      "source_refs": [
+        "国际传播实践相关公开文献"
+      ],
+      "status": "current",
+      "layer": "方法层",
+      "notes": ""
     }
   ],
   "relations": [

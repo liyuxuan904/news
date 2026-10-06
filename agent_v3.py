@@ -59,8 +59,11 @@ class AgentV3:
     def _context(self, question):
         chunks = []
         for h in self.a.search_theory_kb(question, top_k=5):
-            tag = {"concept": "概念", "relation": "关系", "misstatement": "误区"}.get(h["hit_type"], "条目")
-            chunks.append(f"【{tag}】{h['term']}：{h['content']}")
+            n = self._norm_hit(h)
+            if not n:
+                continue
+            tag = {"concept": "概念", "relation": "关系", "misstatement": "误区"}.get(n["type"], "条目")
+            chunks.append(f"【{tag}】{n['term']}：{n['content']}")
         for rel in self.kb["relations"]:
             if all(k in question for k in rel["pair"] if len(rel["pair"]) == 2) or \
                any(p in question for p in rel["pair"]):
@@ -76,9 +79,25 @@ class AgentV3:
                 seen.add(c)
         return "\n".join(out[:8])
 
+    @staticmethod
+    def _norm_hit(h):
+        """规范化任意版本的检索结果，键缺失或结构异常都安全降级"""
+        if not isinstance(h, dict):
+            return None
+        term = h.get("term") or h.get("title") or h.get("name")
+        if not term:
+            return None
+        return {"term": term, "type": h.get("hit_type") or h.get("type") or "条目",
+                "content": h.get("content") or h.get("snippet") or "",
+                "score": h.get("score", 1)}
+
     def _related(self, question):
-        return [{"term": h["term"], "type": h["hit_type"], "score": h.get("score", 1)}
-                for h in self.a.search_theory_kb(question, top_k=3)]
+        out = []
+        for h in self.a.search_theory_kb(question, top_k=3):
+            n = self._norm_hit(h)
+            if n:
+                out.append(n)
+        return out
 
     # ---------- LLM 作答 ----------
     def _llm_answer(self, question, ctx, level):

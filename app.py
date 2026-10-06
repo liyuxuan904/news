@@ -233,7 +233,7 @@ else:
                 pub = PublicKB(brave_key=brave)
                 for name, src in pub.sources.items():
                     try:
-                        hits = pub.search("新闻", sources=[name], top_k=1)
+                        hits = pub.search("民法典" if name == "flk" else "新闻", sources=[name], top_k=1)
                         if hits:
                             st.success(f"{name}：连通 ✓ 命中《{hits[0]['title']}》")
                         else:

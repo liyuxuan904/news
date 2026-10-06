@@ -88,14 +88,21 @@ class FlkSource:
     api = "https://flk.npc.gov.cn/api/"
 
     def search(self, query, top_k=3):
-        params = {"type": "flfg", "searchType": "title;accurate",
+        params = {"type": "flfg", "searchType": "title;vague",
                   "sortTr": "f_bbrq_s;desc", "sort": "true",
                   "page": 1, "size": top_k, "keyword": query}
         url = self.api + "?" + urllib.parse.urlencode(params)
         req = urllib.request.Request(url, headers=DEFAULT_HEADERS)
         with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
             data = json.loads(r.read().decode("utf-8"))
-        items = (data.get("result") or {}).get("data") or data.get("data") or []
+        items = []
+        for path in (("result", "data"), ("data",), ("result",)):
+            n = data
+            for p in path:
+                n = n.get(p, {}) if isinstance(n, dict) else {}
+            if isinstance(n, list) and n:
+                items = n
+                break
         out = []
         for it in items[:top_k]:
             lid = it.get("id", "")

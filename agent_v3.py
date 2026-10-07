@@ -121,10 +121,10 @@ class AgentV3:
         legal = re.search(r"民法典|刑法|著作权|人格权|隐私|名誉|法律|法条|第.{1,6}条|规定|条例", question)
         weak = (not local_top) or local_top[0].get("score", 1) < 2 \
             or re.search(r"百科|出处|原文|谁提出|谁最早", question) or legal
-        sources = ["flk", "wikipedia"] if legal else ["wikipedia", "flk"]
+        names = ["brave", "wikipedia", "flk"] if (legal and self.public and "brave" in self.public.sources) else ["wikipedia", "flk"]
         if self.public and weak:
             try:
-                pub_hits = self.public.search(question, sources=sources)
+                pub_hits = self.public.search(question, sources=names)
                 print(f"[public] triggered=True legal={bool(legal)} hits={len(pub_hits)}")
                 if pub_hits:
                     ctx = (ctx + "\n" if ctx else "") + self.public.format(pub_hits)

@@ -82,8 +82,9 @@ class BraveSource:
 
 
 class FlkSource:
-    """国家法律法规数据库（flk.npc.gov.cn）公开检索接口，权威法条来源。
-    接口为网站公开 JSON 端点，参数或结构变动时静默返回空，不影响主链路。"""
+    """国家法律法规数据库（flk.npc.gov.cn）列表接口。
+    注意：官方未公开搜索 API 文档，仅支持按效力位阶分页枚举；海外服务器访问
+    可能返回 200 空数据。默认不在默认源中，仅在国内部署时显式启用 sources=["flk"]。"""
     name = "flk"
     api = "https://flk.npc.gov.cn/api/"
 
@@ -117,14 +118,14 @@ class FlkSource:
 
 class PublicKB:
     def __init__(self, brave_key=None, templates=None):
-        self.sources = {"wikipedia": WikipediaSource(), "flk": FlkSource()}
+        self.sources = {"wikipedia": WikipediaSource(), "flk": FlkSource()}  # flk 默认不启用
         if brave_key:
             self.sources["brave"] = BraveSource(brave_key)
         for i, tpl in enumerate(templates or []):
             self.sources[f"template{i}"] = (TemplateSource(*tpl) if isinstance(tpl, tuple) else TemplateSource(**tpl))
 
     def search(self, query, sources=None, top_k=5):
-        names = sources or ["wikipedia", "flk"]
+        names = sources or ["wikipedia"]
         out, seen = [], set()
         for name in names:
             src = self.sources.get(name)

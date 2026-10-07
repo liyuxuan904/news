@@ -231,7 +231,9 @@ else:
                 except Exception:
                     brave = None
                 pub = PublicKB(brave_key=brave)
-                for name, src in pub.sources.items():
+                check_order = [n for n in ["wikipedia", "brave", "flk"] if n in pub.sources]
+                for name in check_order:
+                    src = pub.sources[name]
                     try:
                         hits = pub.search("民法典" if name == "flk" else "新闻", sources=[name], top_k=1)
                         if hits:
@@ -241,7 +243,7 @@ else:
                     except Exception as e:
                         st.error(f"{name}：失败 ✗ {type(e).__name__}：{e}")
                 if "brave" not in pub.sources:
-                    st.info("未配置 BRAVE_API_KEY，Brave 全网搜索未启用（可选增强）")
+                    st.info("提示：flk（国家法律法规数据库）官方无公开搜索接口，海外服务器返回空，默认仅作展示；配置 BRAVE_API_KEY 可启用全网权威搜索兜底")
             except Exception as e:
                 st.error(f"自检失败：{e}")
         st.subheader("导入合并")

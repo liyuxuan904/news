@@ -36,6 +36,8 @@ class TheoryAgent:
         (r"内部.{0,8}(讲话|阅评|材料)|找出谁写的|涉密|内参", "涉密或无法核实来源"),
         (r"已经过时了|过时论", "不成立的否定性预设"),
         (r"违反新闻自由|论证.{0,6}错误|证明.{0,8}不对", "否定性预设论证请求"),
+        (r"编造.{0,8}(文件|红头)|红头文件.{0,4}模板|以假乱真", "伪造公文类请求"),
+        (r"已废止.{0,6}旧版|旧版.{0,4}(准则|条例|文件)", "以旧冒充现行口径"),
         (r"旧.{0,4}表述一直能用|按旧口径", "以旧口径冒充现行口径"),
         (r"昨天闭幕|最新.{0,4}精神", "无法核实的最新文件表述"),
     ]
@@ -57,15 +59,17 @@ class TheoryAgent:
         q = re.sub(r"[‘’“”'\"'\?？。，,:：]", "", query)
         hits = []
         for c in self.kb["concepts"]:
-            score = 0
+            score, ml = 0, 0
             for k in [c["term"]] + c.get("aliases", []):
                 if k and k in q:
                     score += 2
+                    ml = max(ml, len(k))
             for k in c.get("keywords", []):
                 if k and k in q:
                     score += 1
+                    ml = max(ml, len(k))
             if score:
-                hits.append((score, "concept", c["term"], c["canonical_definition"], c["source_level"], c["status"]))
+                hits.append((score, ml, "concept", c["term"], c["canonical_definition"], c["source_level"], c["status"]))
         for r in self.kb["relations"]:
             score = 0
             for k in r["pair"]:
@@ -77,17 +81,17 @@ class TheoryAgent:
                 if any(c and c in q for c in cands):
                     score += 1
             if score >= 1:
-                hits.append((score + (1 if score >= 2 else 0), "relation", "/".join(r["pair"]), r["conclusion"], "A", "current"))
+                hits.append((score + (1 if score >= 2 else 0), 0, "relation", "/".join(r["pair"]), r["conclusion"], "A", "current"))
         def ngrams(s, n=4):
             return {s[i:i+n] for i in range(max(0, len(s)-n+1))}
         qgrams = ngrams(q)
         for m in self.kb["misstatement_bank"]:
             kws = m.get("keywords") or []
             if any(k in q for k in kws) or (ngrams(m["wrong"]) & qgrams):
-                hits.append((1, "misstatement", m["wrong"][:20], m["correction"], "A", "current"))
-        hits.sort(key=lambda x: -x[0])
+                hits.append((1, 0, "misstatement", m["wrong"][:20], m["correction"], "A", "current"))
+        hits.sort(key=lambda x: (-x[0], -x[1]))
         return [{"hit_type": t, "term": tm, "content": d, "source_level": sl, "status": st, "score": s}
-                for s, t, tm, d, sl, st in hits[:top_k]]
+                for s, _, t, tm, d, sl, st in hits[:top_k]]
 
     def compare_concepts(self, concept_a, concept_b, scenario=None):
         for r in self.kb["relations"]:
@@ -138,6 +142,15 @@ class TheoryAgent:
         if question.startswith("把") or "改写为规范表述" in question:
             calib = self.check_canonical_formulation(question.replace("把", "").replace("改写为规范表述", ""))
 
+        if not hits and not rel and re.search(r"有哪些|列出|清单|索引|政策文件", question):
+            docs = self.kb.get("policy_docs", [])
+            listing = "；".join(f"《{d['title']}》（{d.get('type', '')}）" for d in docs[:10])
+            return {"decision": "answer", "answer": {
+                        "规范结论": f"知识库共收录 {len(docs)} 份政策文件索引，前 10 份如下：",
+                        "要点解释": [listing, "完整清单见知识库管理页的浏览标签"],
+                        "依据": [{"条目": "policy_docs", "来源等级": "A", "状态": "current"}],
+                        "风险与需人工复核项": ["无"]},
+                    "human_ticket": None}
         if not hits and not rel:
             return {"decision": "review", "reason": "知识库未命中，低置信",
                     "human_ticket": self.flag_for_human_review("知识库未命中: " + question[:30]),
